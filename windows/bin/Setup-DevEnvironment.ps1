@@ -30,51 +30,51 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
 $tools = @{
 
     # General developer tools
-    'git' = '2.42.0'
+    'git' = '2.47.0'
 
     # IDEs
-    'intellijidea-community' = '2023.2.3'
-    'R.Studio' = '2023.9.1'
+    'intellijidea-community' = '2024.2.4'
+    'R.Studio' = '2024.9.0'
 
     # For comapring files
     'meld' = '3.22.0'
 
     # For unziping files
-    'winscp' = '6.1.2'
+    'winscp' = '6.3.5'
 
     # for testing APIs
-    'postman' = '10.18.10'
+    'postman' = '11.13.0'
 
-    'terraform' = '1.6.2'
+    'terraform' = '1.9.8'
 
-    'awscli' = '2.13.32'
-    'azure-cli' = '2.53.1'
+    'awscli' = '2.19.5'
+    'azure-cli' = '2.66.0'
 
     # Java Lanuage
-    'openjdk' = '17.0.2'
-    'maven' = '3.9.5'
+    'openjdk' = '22.0.2'
+    'maven' = '3.9.9'
 
     # Scala Language
     'scala.install' = '2.11.4'
 
     # NodeJS Language
-    'nodejs' = '21.1.0'
+    'nodejs' = '23.2.0'
 
     # R Language
-    'r' = '4.3.1'
+    'r' = '4.4.2'
 
     # required for git code signing
-    'Gpg4win' = '4.2.0'
+    'Gpg4win' = '4.3.1'
 
 
     # Database tools
-    'SQLite' = '3.43.2' # or the latest version
-    'dbeaver' = '23.2.1' # or the latest version you want
+    'SQLite' = '3.47.0' # or the latest version
+    'dbeaver' = '24.2.3' # or the latest version you want
 
 
 
-    'powerbi' = '2.122.746.0' # If you use PowerBI for visualization
-    'tableau-public' = '2023.3.0'
+    'powerbi' = '2.137.1102.0' # If you use PowerBI for visualization
+    'tableau-public' = '2024.3.0'
 }
 
 # Get a list of currently installed Chocolatey packages
