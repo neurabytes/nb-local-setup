@@ -73,7 +73,7 @@ $tools = @{
 
 
 
-    'powerbi' = '2.137.1102.0' # If you use PowerBI for visualization
+    'powerbi' = '2.137.952.0' # If you use PowerBI for visualization
     'tableau-public' = '2024.3.0'
 }
 
