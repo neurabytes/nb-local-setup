@@ -55,7 +55,7 @@ $tools = @{
     'maven' = '3.9.9'
 
     # Scala Language
-    'scala.install' = '2.11.4'
+    'scala.portable' = '2.11.4'
 
     # NodeJS Language
     'nodejs' = '23.2.0'
