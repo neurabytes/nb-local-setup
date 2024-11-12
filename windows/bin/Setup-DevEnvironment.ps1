@@ -55,7 +55,7 @@ $tools = @{
     'maven' = '3.9.9'
 
     # Scala Language
-    'scala.install' = '2.11.4'
+    'scala.portable' = '2.11.4'
 
     # NodeJS Language
     'nodejs' = '23.2.0'
@@ -73,9 +73,13 @@ $tools = @{
 
 
 
-    'powerbi' = '2.137.1102.0' # If you use PowerBI for visualization
+    'powerbi' = '2.137.952.0' # If you use PowerBI for visualization
     'tableau-public' = '2024.3.0'
 }
+
+$ignore_checksum_tools = @(
+    'powerbi'
+    )
 
 # Get a list of currently installed Chocolatey packages
 $installedPackagesDetails = choco list --local-only -r | ForEach-Object {
@@ -95,11 +99,20 @@ if ($action -eq "install") {
                 Write-Host "$($tool.Name) is already at version $($tool.Value). No action taken."
             } else {
                 Write-Host "Upgrading $($tool.Name) from version $($installedDetail.Version) to version $($tool.Value)..."
-                choco upgrade $tool.Name --version $tool.Value -y --force
+                if ($ignore_checksum_tools -contains $tool.Name) {
+                    choco upgrade $tool.Name --version $tool.Value -y --force --ignore-checksums
+                } else {
+                    choco upgrade $tool.Name --version $tool.Value -y --force
+                }
             }
         } else {
             Write-Host "Installing $($tool.Name) version $($tool.Value)..."
-            choco install $tool.Name --version $tool.Value -y
+
+            if ($ignore_checksum_tools -contains $tool.Name) {
+                choco install $tool.Name --version $tool.Value -y --ignore-checksums
+            } else {
+                choco install $tool.Name --version $tool.Value -y
+            }
         }
     }
 } elseif ($action -eq "uninstall") {
