@@ -26,13 +26,14 @@ jobs:
 
       - name: Set branch name
         id: branch_name
-        run: echo "BRANCH_NAME=feature/$(date +'%m_%Y')_tools_version_update" >> $GITHUB_ENV
+        run: echo "BRANCH_NAME=automation/feature/$(date +'%m_%Y')_tools_version_update" >> $GITHUB_ENV
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ env.BRANCH_NAME }}
+          base: develop # Change to the protected branch name (e.g., main or develop)
           commit-message: "Update tools.json with latest versions"
           title: "Update tools.json with latest versions"
           body: "This PR updates tools.json with the latest versions."
