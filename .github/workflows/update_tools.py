@@ -5,7 +5,7 @@ import os
 def update_tools():
     # Construct the absolute path to tools.json
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
-    tools_path = os.path.join(repo_root, 'tools.json')
+    tools_path = os.path.join(repo_root, 'windows', 'bin','tools.json')
 
     with open(tools_path, 'r') as file:
         tools = json.load(file)
