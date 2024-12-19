@@ -7,7 +7,7 @@ on:
 
 jobs:
   update-tools:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -24,50 +24,12 @@ jobs:
       - name: Update tools.json
         run: python .github/workflows/update_tools.py
 
-      - name: Create new branch and commit changes
-        id: create_branch
-        run: |
-          $branchName = "feature/$(Get-Date -Format 'MM_yyyy')_tools_version_update"
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-          # Check if the branch exists on the remote
-          $remoteBranchExists = git ls-remote --heads origin $branchName
-          if ($remoteBranchExists) {
-              Write-Host "Branch $branchName already exists. Checking out the branch."
-              git checkout $branchName
-              git pull origin $branchName
-          } else {
-              Write-Host "Creating new branch $branchName."
-              git checkout -B $branchName
-          }
-
-          # Stage and commit changes
-          git add windows/bin/tools.json
-          git commit -m 'Update tools.json with latest versions' -q || Write-Host "No changes to commit."
-
-          # Push the branch
-          try {
-              git push -u origin $branchName
-          } catch {
-              Write-Host "Push failed. Attempting to pull and rebase."
-              git pull --rebase origin $branchName
-              git push -u origin $branchName
-          }
-          echo "branch-name=$branchName" >> $env:GITHUB_ENV
-        shell: pwsh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'Update tools.json with latest versions'
-          branch: ${{ env.branch-name }}
-          title: 'Update tools.json with latest versions'
-          body: 'This PR updates the tools.json file with the latest versions of the tools from Chocolatey.'
-          labels: 'automated update'
-          assignees: 'atleyvirdee'
+          commit-message: "Update tools.json with latest versions"
+          branch: "feature/$(date +'%m_%Y')_tools_version_update"
+          title: "Update tools.json with latest versions"
+          body: "This PR updates tools.json with the latest versions."
+          labels: automated-update
