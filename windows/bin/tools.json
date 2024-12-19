@@ -1,0 +1,27 @@
+{
+  "tools": {
+    "git": "2.47.0",
+    "intellijidea-community": "2024.2.4",
+    "R.Studio": "2024.9.0",
+    "meld": "3.22.0",
+    "winscp": "6.3.5",
+    "postman": "11.13.0",
+    "terraform": "1.9.8",
+    "awscli": "2.19.5",
+    "azure-cli": "2.66.0",
+    "openjdk": "22.0.2",
+    "maven": "3.9.9",
+    "scala.portable": "2.11.4",
+    "nodejs": "23.2.0",
+    "r": "4.4.2",
+    "go": "1.23.3",
+    "Gpg4win": "4.3.1",
+    "SQLite": "3.47.0",
+    "dbeaver": "24.2.3",
+    "powerbi": "2.137.952.0",
+    "tableau-public": "2024.3.0"
+  },
+  "ignore_checksum_tools": [
+    "powerbi"
+  ]
+}
