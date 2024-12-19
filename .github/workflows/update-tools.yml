@@ -13,38 +13,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          node-version: '16'
+          python-version: '3.x'
+
+      - name: Install requests
+        run: pip install requests
 
       - name: Update tools.json
-        run: |
-          const fs = require('fs');
-          const https = require('https');
-
-          const tools = JSON.parse(fs.readFileSync('tools.json', 'utf8'));
-          const toolNames = Object.keys(tools.tools);
-
-          toolNames.forEach(tool => {
-            https.get(`https://community.chocolatey.org/api/v2/package/${tool}`, (resp) => {
-              let data = '';
-
-              resp.on('data', (chunk) => {
-                data += chunk;
-              });
-
-              resp.on('end', () => {
-                const latestVersion = JSON.parse(data).Properties.version;
-                tools.tools[tool] = latestVersion;
-
-                fs.writeFileSync('tools.json', JSON.stringify(tools, null, 2));
-              });
-            }).on('error', (err) => {
-              console.log('Error: ' + err.message);
-            });
-          });
-        shell: node
+        run: python .github/workflows/update_tools.py
 
       - name: Create new branch and commit changes
         run: |
