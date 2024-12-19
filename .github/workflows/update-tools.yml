@@ -31,26 +31,34 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          # Create or checkout the branch
-          if git ls-remote --heads origin $branchName | grep $branchName; then
-            echo "Branch $branchName already exists. Checking out the branch."
-            git checkout $branchName
-            git pull origin $branchName
-          else
-            echo "Creating new branch $branchName."
-            git checkout -B $branchName
-          fi
+          # Check if the branch exists on the remote
+          $remoteBranchExists = git ls-remote --heads origin $branchName
+          if ($remoteBranchExists) {
+              Write-Host "Branch $branchName already exists. Checking out the branch."
+              git checkout $branchName
+              git pull origin $branchName
+          } else {
+              Write-Host "Creating new branch $branchName."
+              git checkout -B $branchName
+          }
 
           # Stage and commit changes
           git add windows/bin/tools.json
-          git commit -m 'Update tools.json with latest versions' || echo "No changes to commit."
+          git commit -m 'Update tools.json with latest versions' -q || Write-Host "No changes to commit."
 
           # Push the branch
-          git push -u origin $branchName || (git pull --rebase origin $branchName && git push -u origin $branchName)
-          echo "branch-name=$branchName" >> $GITHUB_ENV
+          try {
+              git push -u origin $branchName
+          } catch {
+              Write-Host "Push failed. Attempting to pull and rebase."
+              git pull --rebase origin $branchName
+              git push -u origin $branchName
+          }
+          echo "branch-name=$branchName" >> $env:GITHUB_ENV
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 
       - name: Create Pull Request
