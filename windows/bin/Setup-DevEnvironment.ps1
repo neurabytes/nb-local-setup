@@ -26,60 +26,24 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
     iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 }
 
-# List of developer tools with specific versions to install/upgrade
-$tools = @{
-
-    # General developer tools
-    'git' = '2.47.0'
-
-    # IDEs
-    'intellijidea-community' = '2024.2.4'
-    'R.Studio' = '2024.9.0'
-
-    # For comapring files
-    'meld' = '3.22.0'
-
-    # For unziping files
-    'winscp' = '6.3.5'
-
-    # for testing APIs
-    'postman' = '11.13.0'
-
-    'terraform' = '1.9.8'
-
-    'awscli' = '2.19.5'
-    'azure-cli' = '2.66.0'
-
-    # Java Lanuage
-    'openjdk' = '22.0.2'
-    'maven' = '3.9.9'
-
-    # Scala Language
-    'scala.portable' = '2.11.4'
-
-    # NodeJS Language
-    'nodejs' = '23.2.0'
-
-    # R Language
-    'r' = '4.4.2'
-
-    # required for git code signing
-    'Gpg4win' = '4.3.1'
-
-
-    # Database tools
-    'SQLite' = '3.47.0' # or the latest version
-    'dbeaver' = '24.2.3' # or the latest version you want
-
-
-
-    'powerbi' = '2.137.952.0' # If you use PowerBI for visualization
-    'tableau-public' = '2024.3.0'
+# Download tools.json if it does not exist
+if (-not (Test-Path -Path "tools.json")) {
+    Write-Host "Downloading tools.json..."
+    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/neurabytes/nb-local-setup/develop/windows/bin/tools.json' -OutFile 'tools.json'
 }
 
-$ignore_checksum_tools = @(
-    'powerbi'
-    )
+# Read tools and ignore_checksum_tools from JSON file
+$jsonData = Get-Content -Raw -Path "tools.json" | ConvertFrom-Json
+
+$tools = @{}
+foreach ($key in $jsonData.tools.PSObject.Properties.Name) {
+    $tools[$key] = $jsonData.tools.$key
+}
+
+$ignore_checksum_tools = @{}
+foreach ($key in $jsonData.ignore_checksum_tools.PSObject.Properties.Name) {
+    $ignore_checksum_tools[$key] = $jsonData.ignore_checksum_tools.$key
+}
 
 # Get a list of currently installed Chocolatey packages
 $installedPackagesDetails = choco list --local-only -r | ForEach-Object {
