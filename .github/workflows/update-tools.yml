@@ -25,6 +25,7 @@ jobs:
         run: python .github/workflows/update_tools.py
 
       - name: Create new branch and commit changes
+        id: create_branch
         run: |
           $branchName = "feature/$(Get-Date -Format 'MM_yyyy')_tools_version_update"
           git config --global user.name 'github-actions[bot]'
@@ -33,17 +34,17 @@ jobs:
           git add tools.json
           git commit -m 'Update tools.json with latest versions'
           git push -u origin $branchName
+          echo "branch-name=$branchName" >> $GITHUB_ENV
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Pull Request
-        id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'Update tools.json with latest versions'
-          branch: ${{ steps.create_branch.outputs.branch }}
+          branch: ${{ env.branch-name }}
           title: 'Update tools.json with latest versions'
           body: 'This PR updates the tools.json file with the latest versions of the tools from Chocolatey.'
           labels: 'automated update'
