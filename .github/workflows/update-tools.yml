@@ -1,0 +1,40 @@
+name: Update Tools
+
+on:
+  schedule:
+  - cron: '0 8 * * 0' # Runs every Sunday at 8 AM
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  update-tools:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Update tools.json
+        run: python .github/workflows/update_tools.py
+
+      - name: Set branch name
+        id: branch_name
+        run: echo "BRANCH_NAME=automation/feature/$(date +'%m_%Y')_tools_version_update" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ env.BRANCH_NAME }}
+          base: develop # Change to the protected branch name (e.g., main or develop)
+          commit-message: "Update tools.json with latest versions"
+          title: "Update tools.json with latest versions"
+          body: "This PR updates tools.json with the latest versions."
+          labels: automated-update
