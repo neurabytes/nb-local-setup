@@ -3,7 +3,10 @@ import requests
 import os
 
 def update_tools():
-    tools_path = os.path.join(os.path.dirname(__file__), '../../tools.json')
+    # Construct the absolute path to tools.json
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+    tools_path = os.path.join(repo_root, 'tools.json')
+
     with open(tools_path, 'r') as file:
         tools = json.load(file)
 
