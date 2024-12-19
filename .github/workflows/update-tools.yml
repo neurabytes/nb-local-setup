@@ -7,43 +7,35 @@ on:
 
 jobs:
   update-tools:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Install Chocolatey
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y apt-transport-https
-          curl -fsSL https://packages.chocolatey.org/chocolatey.list | sudo tee /etc/apt/sources.list.d/chocolatey.list
-          sudo apt-get update
-          sudo apt-get install -y chocolatey
+      - name: Set up PowerShell
+        uses: actions/setup-powershell@v1
 
       - name: Update tools.json
         run: |
-          choco outdated --limit-output | while read -r line; do
-            tool=$(echo $line | cut -d'|' -f1)
-            version=$(echo $line | cut -d'|' -f3)
-            jq --arg tool "$tool" --arg version "$version" '.tools[$tool] = $version' tools.json > tools.tmp.json
-            mv tools.tmp.json tools.json
-          done
+          $tools = Get-Content -Raw -Path "tools.json" | ConvertFrom-Json
+          foreach ($tool in $tools.tools.PSObject.Properties.Name) {
+            $latestVersion = (Invoke-RestMethod -Uri "https://community.chocolatey.org/api/v2/package/$tool" -Method Get -Headers @{"Accept"="application/json"}).Properties.version
+            $tools.tools.$tool = $latestVersion
+          }
+          $tools | ConvertTo-Json -Depth 32 | Set-Content -Path "tools.json"
+        shell: pwsh
 
       - name: Create new branch and commit changes
         run: |
-          BRANCH_NAME="feature/$(date +'%m_%Y')_tools_version_update"
+          $branchName = "feature/$(Get-Date -Format 'MM_yyyy')_tools_version_update"
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git checkout -B $BRANCH_NAME
+          git checkout -B $branchName
           git add tools.json
           git commit -m 'Update tools.json with latest versions'
-          git push -u origin $BRANCH_NAME
+          git push -u origin $branchName
+        shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
