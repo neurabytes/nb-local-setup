@@ -17,7 +17,7 @@ def update_tools():
     for tool in tool_names:
         try:
             # Fetch the Chocolatey package data
-            response = requests.get(f'https://community.chocolatey.org/api/v2/Packages()?$filter=Id eq \'{tool}\'')
+            response = requests.get(f'https://community.chocolatey.org/api/v2/Packages()?$filter=Id eq \'{tool}\'&$orderby=Published desc')
             if response.status_code == 200:
                 # Parse the XML response to get the latest version
                 root = ET.fromstring(response.content)
