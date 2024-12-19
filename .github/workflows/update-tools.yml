@@ -30,14 +30,28 @@ jobs:
           $branchName = "feature/$(Get-Date -Format 'MM_yyyy')_tools_version_update"
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git checkout -B $branchName
-          git add tools.json
-          git commit -m 'Update tools.json with latest versions'
-          git push -u origin $branchName
+
+          # Create or checkout the branch
+          if git ls-remote --heads origin $branchName | grep $branchName; then
+            echo "Branch $branchName already exists. Checking out the branch."
+            git checkout $branchName
+            git pull origin $branchName
+          else
+            echo "Creating new branch $branchName."
+            git checkout -B $branchName
+          fi
+
+          # Stage and commit changes
+          git add windows/bin/tools.json
+          git commit -m 'Update tools.json with latest versions' || echo "No changes to commit."
+
+          # Push the branch
+          git push -u origin $branchName || (git pull --rebase origin $branchName && git push -u origin $branchName)
           echo "branch-name=$branchName" >> $GITHUB_ENV
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
