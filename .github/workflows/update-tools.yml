@@ -13,18 +13,38 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up PowerShell
-        uses: actions/setup-powershell@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
       - name: Update tools.json
         run: |
-          $tools = Get-Content -Raw -Path "tools.json" | ConvertFrom-Json
-          foreach ($tool in $tools.tools.PSObject.Properties.Name) {
-            $latestVersion = (Invoke-RestMethod -Uri "https://community.chocolatey.org/api/v2/package/$tool" -Method Get -Headers @{"Accept"="application/json"}).Properties.version
-            $tools.tools.$tool = $latestVersion
-          }
-          $tools | ConvertTo-Json -Depth 32 | Set-Content -Path "tools.json"
-        shell: pwsh
+          const fs = require('fs');
+          const https = require('https');
+
+          const tools = JSON.parse(fs.readFileSync('tools.json', 'utf8'));
+          const toolNames = Object.keys(tools.tools);
+
+          toolNames.forEach(tool => {
+            https.get(`https://community.chocolatey.org/api/v2/package/${tool}`, (resp) => {
+              let data = '';
+
+              resp.on('data', (chunk) => {
+                data += chunk;
+              });
+
+              resp.on('end', () => {
+                const latestVersion = JSON.parse(data).Properties.version;
+                tools.tools[tool] = latestVersion;
+
+                fs.writeFileSync('tools.json', JSON.stringify(tools, null, 2));
+              });
+            }).on('error', (err) => {
+              console.log('Error: ' + err.message);
+            });
+          });
+        shell: node
 
       - name: Create new branch and commit changes
         run: |
