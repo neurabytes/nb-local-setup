@@ -19,7 +19,9 @@
     "SQLite": "3.47.2",
     "dbeaver": "24.3.0",
     "powerbi": "2.137.952.0",
-    "tableau-public": "2024.3.0"
+    "tableau-public": "2024.3.0",
+    "SourceTree": "3.4.21",
+    "github-desktop": "3.4.10"
   },
   "ignore_checksum_tools": [
     "powerbi"
