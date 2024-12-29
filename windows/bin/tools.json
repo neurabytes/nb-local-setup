@@ -7,7 +7,7 @@
     "winscp": "6.3.6",
     "postman": "11.19.0",
     "terraform": "1.10.3",
-    "awscli": "2.22.21",
+    "awscli": "2.22.25",
     "azure-cli": "2.67.0",
     "openjdk": "22.0.2",
     "maven": "3.9.9",
@@ -17,11 +17,11 @@
     "go": "1.23.4",
     "Gpg4win": "4.4.0",
     "SQLite": "3.47.2",
-    "dbeaver": "24.3.0",
+    "dbeaver": "24.3.1",
     "powerbi": "2.137.952.0",
     "tableau-public": "2024.3.0",
     "SourceTree": "3.4.21",
-    "github-desktop": "3.4.10"
+    "github-desktop": "3.4.12"
   },
   "ignore_checksum_tools": [
     "powerbi"
