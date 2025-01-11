@@ -21,7 +21,8 @@
     "powerbi": "2.137.952.0",
     "tableau-public": "2024.3.0",
     "SourceTree": "3.4.21",
-    "github-desktop": "3.4.12"
+    "github-desktop": "3.4.12",
+    "make": "4.4.1"
   },
   "ignore_checksum_tools": [
     "powerbi"
