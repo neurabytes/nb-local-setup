@@ -22,7 +22,8 @@
     "tableau-public": "2024.3.0",
     "SourceTree": "3.4.21",
     "github-desktop": "3.4.12",
-    "make": "4.4.1"
+    "make": "4.4.1",
+    "act-cli": "0.2.71"
   },
   "ignore_checksum_tools": [
     "powerbi"
