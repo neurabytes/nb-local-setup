@@ -19,11 +19,34 @@ This repository contains a dynamic collection of scripts designed to streamline 
 
 ### Overview
 
-1. `Setup-DevEnvironment.ps1`: Ensures that Chocolatey is installed and then facilitates the installation, upgrade, or uninstallation of a predefined list of developer tools.
-2. `Setup-PyEnvWin.ps1`: Facilitates the installation or uninstallation of `pyenv-win` on Windows platforms.
-3. `Setup-DockerEnvironment.ps1`: Installs Docker Desktop for Windows using Chocolatey.
-4. `Setup-GitGPG.ps1`: Configures Git to sign commits and tags with GPG on Windows.
-5. Click here to generate GitHub Token: [Generate GitHub Token](https://github.com/settings/tokens/new?description=local_cli_custom_git_hub&scopes=repo,gist,read:org,workflow,read:user,user:email) 
+1. How to use GitHub token for your CLI
+2. `Setup-DevEnvironment.ps1`: Ensures that Chocolatey is installed and then facilitates the installation, upgrade, or uninstallation of a predefined list of developer tools.
+3. `Setup-PyEnvWin.ps1`: Facilitates the installation or uninstallation of `pyenv-win` on Windows platforms.
+4. `Setup-DockerEnvironment.ps1`: Installs Docker Desktop for Windows using Chocolatey.
+5. `Setup-GitGPG.ps1`: Configures Git to sign commits and tags with GPG on Windows.
+
+---
+
+
+### How to use GitHub token on your CLI
+
+These steps explain on how to generate the token and then use it in the local cli.
+
+1. Click to generate GitHub Token: [Generate GitHub Token](https://github.com/settings/tokens/new?description=local_cli_custom_git_hub&scopes=repo,gist,read:org,workflow,read:user,user:email)
+2. Once you generate your token then save it on your local securely in a file.
+3. You can use it in the command line using one of the following commands
+
+**For Windows**
+```powershell
+$env:CUSTOM_GITHUB_TOKEN = "TOKEN HERE"
+```
+
+**For Linux**
+```bash
+export CUSTOM_GITHUB_TOKEN = "TOKEN HERE"
+```
+
+
 
 ---
 
