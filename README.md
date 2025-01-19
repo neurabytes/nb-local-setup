@@ -23,6 +23,7 @@ This repository contains a dynamic collection of scripts designed to streamline 
 2. `Setup-PyEnvWin.ps1`: Facilitates the installation or uninstallation of `pyenv-win` on Windows platforms.
 3. `Setup-DockerEnvironment.ps1`: Installs Docker Desktop for Windows using Chocolatey.
 4. `Setup-GitGPG.ps1`: Configures Git to sign commits and tags with GPG on Windows.
+5. Click here to generate GitHub Token: [Generate GitHub Token](https://github.com/settings/tokens/new?description=local_cli_custom_git_hub&scopes=repo,gist,read:org,workflow,read:user,user:email) 
 
 ---
 
